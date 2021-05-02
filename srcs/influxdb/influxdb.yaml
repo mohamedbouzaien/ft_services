@@ -24,7 +24,8 @@ spec:
         app: influxdb
     spec:
       containers:
-        - image: influxdb:1.7.4
+        - image: service_influxdb
+          imagePullPolicy: Never
           name: influxdb
           ports:
             - containerPort: 8086

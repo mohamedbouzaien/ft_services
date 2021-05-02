@@ -1,9 +1,9 @@
 FROM alpine
-RUN apk add grafana --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ --allow-untrusted --no-cache
+RUN apk update && apk add --no-cache --upgrade bash && apk add influxdb
 RUN apk add telegraf --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted --no-cache
 RUN mkdir -p /etc/telegraf
 COPY telegraf.conf /etc/telegraf/telegraf.conf
 COPY config.sh /config.sh
 RUN chmod +x /config.sh
-EXPOSE 3000
+EXPOSE 3306
 CMD ./config.sh
