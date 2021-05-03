@@ -6,7 +6,10 @@ metadata:
     app: wordpress
 spec:
   ports:
-    - port: 80
+    - port: 5050
+      targetPort: 5050
+      nodePort: 5050
+      protocol: TCP
   selector:
     app: wordpress
     tier: frontend
@@ -23,7 +26,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 20Gi
+      storage: 2Gi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -45,8 +48,10 @@ spec:
         tier: frontend
     spec:
       containers:
-      - image: wordpress:4.8-apache
+      - image: service_wordpress
+        imagePullPolicy: Never
         name: wordpress
+
         env:
         - name: WORDPRESS_DB_HOST
           value: wordpress-mysql
@@ -56,11 +61,11 @@ spec:
               name: mysql-pass
               key: password
         ports:
-        - containerPort: 80
+        - containerPort: 5050
           name: wordpress
         volumeMounts:
         - name: wordpress-persistent-storage
-          mountPath: /var/www/html
+          mountPath: /var/www/wordpress
       volumes:
       - name: wordpress-persistent-storage
         persistentVolumeClaim:
