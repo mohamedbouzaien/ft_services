@@ -3,6 +3,7 @@ RUN apk update && apk add wget php7 php7-fpm php7-mysqli php7-mbstring php7-json
 RUN	wget https://wordpress.org/latest.tar.gz && tar -xzvf latest.tar.gz && rm latest.tar.gz
 RUN mkdir -p /usr/share/
 RUN mv /wordpress /usr/share/
+COPY wp-config.php /usr/share/wordpress
 RUN apk add telegraf --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted --no-cache
 RUN mkdir -p /etc/telegraf
 COPY telegraf.conf /etc/telegraf/telegraf.conf

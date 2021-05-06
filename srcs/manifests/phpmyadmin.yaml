@@ -12,21 +12,8 @@ spec:
       protocol: TCP
   selector:
     app: phpmyadmin
-    tier: frontend
   type: LoadBalancer
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: pma-pv-claim
-  labels:
-    app: phpmyadmin
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 2Gi
+  loadBalancerIP: 192.168.49.12
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -38,9 +25,6 @@ spec:
   selector:
     matchLabels:
       app: phpmyadmin
-      tier: frontend
-  strategy:
-    type: Recreate
   template:
     metadata:
       labels:
@@ -54,10 +38,3 @@ spec:
         ports:
         - containerPort: 5000
           name: phpmyadmin
-        volumeMounts:
-        - name: phpmyadmin-persistent-storage
-          mountPath: /var/www/phpmyadmin
-      volumes:
-      - name: phpmyadmin-persistent-storage
-        persistentVolumeClaim:
-          claimName: pma-pv-claim
